@@ -1,3 +1,4 @@
+const mysql = require('mysql2');
 const db = mysql.createConnection(
     {
       host: 'localhost',
@@ -8,4 +9,6 @@ const db = mysql.createConnection(
     },
     console.log(`Connected to the role_db database.`)
     );
+   
     db.connect()
+    module.exports = db;

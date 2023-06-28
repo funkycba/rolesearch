@@ -1,6 +1,7 @@
+const db = require('./db/connection.js');
 const inquirer = require('inquirer');
 function loadMainPrompts() {
-    return inquirer.prompt([
+    inquirer.prompt([
         {
             type: "list",
             name: "choice",
@@ -38,11 +39,25 @@ function loadMainPrompts() {
             ]
         }
     ]).then(res => {
-        db.query('SELECT * FROM employee', function (err, results) {
-            console.log(results);
+        console.log(res);
+        switch (res) {
+            case "VIEW_EMPLOYEES":
+                db.query('SELECT * FROM employee', function (err, results) {
+                    console.table(results);
+                    console.log(err, results);
+                
+                }
+                ) 
+                break;
+                default:
+                    quit();
         }
-        )
+        // db.query('SELECT * FROM employee', function (err, results) {
+
+        //     console.log(results);
+        // }
+        // )
     }
-    )
+    ) .catch(err => console.log(err))
 };
 loadMainPrompts();
