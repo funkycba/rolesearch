@@ -96,31 +96,108 @@ function viewAllRoles() {
     )
 }
 function departmentAdd() {
-    db.query('INSERT INTO department', function (err, results) {
-        if (err) console.log(err);
-        console.table(results);
-        loadMainPrompts();
+    inquirer.prompt([ 
+        {
+        type: 'input',
+        name: 'departmentName',
+        message: 'Enter the name of department:'
+      }
+    ]).then(answers => {
+        const { departmentName } = answers;
+        const sql = 'INSERT INTO department (name) VALUES (?)';
     
-    }
-    )
+        db.query(sql, [ departmentName ], function (err, results) {
+          if (err) console.log(err);
+          console.table(results);
+          loadMainPrompts();
+        });
+      }).catch(err => console.log(err));
 }
 function roleAdd() {
-    db.query('INSERT INTO rolecall', function (err, results) {
-        if (err) console.log(err);
-        console.table(results);
-        loadMainPrompts();
+    inquirer.prompt([
+        {
+          type: 'input',
+          name: 'roleTitle',
+          message: 'Enter the role title:'
+        },
+        {
+          type: 'input',
+          name: 'salary',
+          message: 'Enter the salary for the role:'
+        },
+        {
+          type: 'input',
+          name: 'departmentId',
+          message: 'Enter the department ID for the role:'
+        }
+        // Add more prompts for other role attributes if necessary
+      ]).then(answers => {
+        const { roleTitle, salary, departmentId } = answers;
+        const sql = 'INSERT INTO rolecall (title, salary, department_id) VALUES (?, ?, ?)';
     
-    }
-    )
+        db.query(sql, [roleTitle, salary, departmentId], function (err, results) {
+          if (err) console.log(err);
+          console.table(results);
+          loadMainPrompts();
+        });
+      }).catch(err => console.log(err));
 }
 function employeeAdd() {
-    db.query('INSERT INTO employee', function (err, results) {
-        if (err) console.log(err);
-        console.table(results);
-        loadMainPrompts();
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'firstName',
+            message: 'Enter firstname:'
+        },
+        {
+          type: 'input',
+          name: 'lastName',
+          message: 'Enter last name:'
+        },
+        {
+            type: 'input',
+            name: 'roleId',
+            message: 'Enter the role ID:'
+        },
+        {
+          type: 'input',
+          name: 'managerId',
+          message: 'Enter the manager ID for the employee:'
+        }
+        // Add more prompts for other role attributes if necessary
+      ]).then(answers => {
+        const { firstName, lastName, roleId, managerId } = answers;
+        const sql = 'INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)';
     
-    }
-    )
+        db.query(sql, [firstName, lastName, roleId, managerId], function (err, results) {
+          if (err) console.log(err);
+          console.table(results);
+          loadMainPrompts();
+        });
+      }).catch(err => console.log(err));
 }
+function updateEmployee() {
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'id',
+            message: 'Enter employee id:'
+        },
+        {
+            type: 'input',
+            name: 'role_id',
+            message: 'Enter role:'
+        }
+    ]).then(answers => {
+        const { id,  role_id, } = answers;
+        const sql = 'UPDATE employee SET ? WHERE id = ?';
+    
+        db.query(sql, [{role_id},id], function (err, results) {
+          if (err) console.log(err);
+          console.table(results);
+          loadMainPrompts();
+        });
+      }).catch(err => console.log(err));
+    }
 
 loadMainPrompts();
